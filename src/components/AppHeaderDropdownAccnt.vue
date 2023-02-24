@@ -1,5 +1,5 @@
 <template>
-  <CDropdown variant="nav-item">
+  <CDropdown>
     <CDropdownToggle placement="bottom-end" class="py-0" :caret="false">
       <CAvatar :src="avatar" size="md" />
     </CDropdownToggle>
@@ -40,13 +40,16 @@
       <CDropdownItem>
         <CIcon icon="cil-shield-alt" /> Lock Account
       </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-lock-locked" /> Logout </CDropdownItem>
+      <CDropdownItem @click="handleLogout()">
+        <CIcon icon="cil-lock-locked" /> Logout
+      </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
 </template>
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
+import axios from 'axios'
 export default {
   name: 'AppHeaderDropdownAccnt',
   setup() {
@@ -54,6 +57,24 @@ export default {
       avatar: avatar,
       itemsCount: 42,
     }
+  },
+  methods: {
+    async handleLogout() {
+      await axios
+        .get(`https://mateauto.test/api/user/logout`)
+        .then((logoutResponse) => {
+          if (logoutResponse.data.success) {
+            localStorage.removeItem('token')
+            this.$router.push({ path: '/login' })
+          } else {
+            alert(' User not logged out')
+          }
+        })
+        .catch((logoutError) => {
+          console.log(logoutError.data)
+          alert('Error during logout')
+        })
+    },
   },
 }
 </script>

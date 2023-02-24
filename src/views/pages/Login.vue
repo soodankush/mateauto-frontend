@@ -6,7 +6,7 @@
           <CCardGroup>
             <CCard class="p-4">
               <CCardBody>
-                <CForm>
+                <CForm @submit.prevent="handleLogin">
                   <h1>Login</h1>
                   <p class="text-medium-emphasis">Sign In to your account</p>
                   <CInputGroup class="mb-3">
@@ -14,8 +14,9 @@
                       <CIcon icon="cil-user" />
                     </CInputGroupText>
                     <CFormInput
-                      placeholder="Username"
-                      autocomplete="username"
+                      placeholder="Email"
+                      autocomplete="email"
+                      v-model="formData.email"
                     />
                   </CInputGroup>
                   <CInputGroup class="mb-4">
@@ -26,11 +27,14 @@
                       type="password"
                       placeholder="Password"
                       autocomplete="current-password"
+                      v-model="formData.password"
                     />
                   </CInputGroup>
                   <CRow>
                     <CCol :xs="6">
-                      <CButton color="primary" class="px-4"> Login </CButton>
+                      <CButton color="primary" class="px-4" type="submit">
+                        Login
+                      </CButton>
                     </CCol>
                     <CCol :xs="6" class="text-right">
                       <CButton color="link" class="px-0">
@@ -64,7 +68,40 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Login',
+  data() {
+    return {
+      formData: {
+        email: null,
+        password: null,
+      },
+    }
+  },
+  methods: {
+    async handleLogin() {
+      await axios
+        .post('https://mateauto.test/api/login', this.formData)
+        .then((response) => {
+          alert('data fetched')
+          if (
+            response.data.success === true &&
+            response.data.token !== undefined
+          ) {
+            axios.defaults.headers.common[
+              'Authorization'
+            ] = `Bearer ${response.data.token}`
+            localStorage.setItem('token', JSON.stringify(response.data.token))
+            this.$router.push({ name: 'Apps' })
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      alert('User logged')
+    },
+  },
 }
 </script>

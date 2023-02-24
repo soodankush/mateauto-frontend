@@ -12,10 +12,9 @@
     "
   >
     <CSidebarBrand>
-      <CIcon
-        custom-class-name="sidebar-brand-full"
-        :icon="logoNegative"
-        :height="35"
+      <img
+        :src="'https://mateauto.io/assets/images/mateauto.png'"
+        class="sidebar-brand-full"
       />
       <CIcon
         custom-class-name="sidebar-brand-narrow"

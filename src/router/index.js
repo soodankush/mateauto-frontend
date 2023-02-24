@@ -4,7 +4,7 @@ import DefaultLayout from '@/layouts/DefaultLayout'
 
 const routes = [
   {
-    path: '/',
+    path: '/user',
     name: 'Home',
     component: DefaultLayout,
     redirect: '/dashboard',
@@ -13,6 +13,9 @@ const routes = [
         path: '/apps',
         name: 'Apps',
         component: () => import('@/views/dashboard/ConnectedApps.vue'),
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: '/dashboard',
@@ -22,6 +25,9 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: '/theme',
@@ -269,6 +275,23 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('@/views/pages/Login'),
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  {
+    path: '/',
+    redirect: () => {
+      return 'apps'
+    },
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/pages/Register'),
   },
 ]
 
@@ -279,6 +302,26 @@ const router = createRouter({
     // always scroll to top
     return { top: 0 }
   },
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!localStorage.getItem('token')) {
+      next({
+        path: '/login',
+      })
+
+      return
+    }
+  }
+
+  if (to.name === 'Login' && localStorage.getItem('token')) {
+    next({
+      name: from.name,
+    })
+  }
+
+  next()
 })
 
 export default router

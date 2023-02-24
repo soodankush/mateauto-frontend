@@ -17,7 +17,7 @@
                   <ul id="services">
                     <li>
                       <div class="twitter">
-                        <a href="https://twitter.com/colorlib/">
+                        <a :href="twitter_url">
                           <img
                             src="https://cdn-icons-png.flaticon.com/512/3938/3938028.png"
                             width="50"
@@ -27,8 +27,19 @@
                       <span>Twitter</span>
                     </li>
                     <li>
+                      <div class="gumroad">
+                        <a :href="gumroad_url">
+                          <img
+                            src="https://seeklogo.com/images/G/gumroad-logo-3A93C7330E-seeklogo.com.png"
+                            width="50"
+                          />
+                        </a>
+                      </div>
+                      <span>Gumroad</span>
+                    </li>
+                    <li>
                       <div class="youtube">
-                        <a href="https://www.youtube.com/c/Colorlib">
+                        <a :href="youtube_url">
                           <img
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0SVNZ2A92EA0Y3G85R62OTV9DECgf7_1Nlv7aYkWk_w&s"
                             width="50"
@@ -194,13 +205,38 @@ section #services li span {
 </style>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'ConnectedApps',
   components: {},
   data() {
     return {
       message: 'Hello Worl 1d',
+      twitter_url: null,
+      gumroad_url: null,
+      youtube_url: 'https://www.youtube.com/c/Colorlib',
     }
+  },
+  created() {
+    axios
+      .get('https://mateauto.test/api/twitter/user/login')
+      .then((response) => {
+        console.log(response)
+        this.twitter_url = response.data.url
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    axios
+      .get('https://mateauto.test/api/gumroad/user/login')
+      .then((response) => {
+        this.gumroad_url = response.data.url
+        console.log(response)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   },
 }
 </script>

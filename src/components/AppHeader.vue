@@ -5,7 +5,7 @@
         <CIcon icon="cil-menu" size="lg" />
       </CHeaderToggler>
       <CHeaderBrand class="mx-auto d-lg-none" to="/">
-        <img src="https://mateauto.io/assets/images/mateauto.png" />
+        <img :src="'https://mateauto.io/assets/images/mateauto.png'" />
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
