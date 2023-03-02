@@ -205,8 +205,6 @@ section #services li span {
 </style>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'ConnectedApps',
   components: {},
@@ -218,9 +216,9 @@ export default {
       youtube_url: 'https://www.youtube.com/c/Colorlib',
     }
   },
-  created() {
-    axios
-      .get('https://mateauto.test/api/twitter/user/login')
+  mounted() {
+    this.$http
+      .get('/twitter/user/login')
       .then((response) => {
         console.log(response)
         this.twitter_url = response.data.url
@@ -228,8 +226,8 @@ export default {
       .catch((error) => {
         console.log(error)
       })
-    axios
-      .get('https://mateauto.test/api/gumroad/user/login')
+    this.$http
+      .get('/gumroad/user/login')
       .then((response) => {
         this.gumroad_url = response.data.url
         console.log(response)

@@ -12,9 +12,9 @@
   "license": "MIT",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint",
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --mode development",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
   },

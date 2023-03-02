@@ -16,5 +16,6 @@ app.use(CoreuiVue)
 app.provide('icons', icons)
 app.component('CIcon', CIcon)
 app.component('DocsExample', DocsExample)
+axios.defaults.baseURL = process.env.VUE_APP_ROOT_API
 app.config.globalProperties.$http = axios
 app.mount('#app')

@@ -68,8 +68,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'Login',
   data() {
@@ -82,15 +80,14 @@ export default {
   },
   methods: {
     async handleLogin() {
-      await axios
-        .post('https://mateauto.test/api/login', this.formData)
+      await this.$http
+        .post('/login', this.formData)
         .then((response) => {
-          alert('data fetched')
           if (
             response.data.success === true &&
             response.data.token !== undefined
           ) {
-            axios.defaults.headers.common[
+            this.$http.defaults.headers.common[
               'Authorization'
             ] = `Bearer ${response.data.token}`
             localStorage.setItem('token', JSON.stringify(response.data.token))
@@ -100,7 +97,6 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-      alert('User logged')
     },
   },
 }

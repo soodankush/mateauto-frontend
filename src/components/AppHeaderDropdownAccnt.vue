@@ -49,7 +49,7 @@
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
-import axios from 'axios'
+
 export default {
   name: 'AppHeaderDropdownAccnt',
   setup() {
@@ -60,12 +60,13 @@ export default {
   },
   methods: {
     async handleLogout() {
-      await axios
-        .get(`https://mateauto.test/api/user/logout`)
+      await this.$http
+        .get('/user/logout')
         .then((logoutResponse) => {
           if (logoutResponse.data.success) {
             localStorage.removeItem('token')
             this.$router.push({ path: '/login' })
+            alert(' User logged out')
           } else {
             alert(' User not logged out')
           }
