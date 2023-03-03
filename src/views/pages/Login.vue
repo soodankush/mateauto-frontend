@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import AuthService from '../../../services/auth.service'
 export default {
   name: 'Login',
   data() {
@@ -78,23 +79,29 @@ export default {
       },
     }
   },
+  mounted() {},
   methods: {
     async handleLogin() {
-      await this.$http
-        .post('/login', this.formData)
+      this.$http
+        .get(process.env.VUE_APP_ROOT + '/sanctum/csrf-cookie')
         .then((response) => {
-          if (
-            response.data.success === true &&
-            response.data.token !== undefined
-          ) {
-            this.$http.defaults.headers.common[
-              'Authorization'
-            ] = `Bearer ${response.data.token}`
-            localStorage.setItem('token', JSON.stringify(response.data.token))
-            this.$router.push({ name: 'Apps' })
+          if (response.status === 204) {
+            AuthService.login({
+              email: this.formData.email,
+              password: this.formData.password,
+            })
+              .then((response) => {
+                if (response.success === true && response.token !== undefined) {
+                  this.$router.push({ name: 'Apps' })
+                }
+              })
+              .catch((error) => {
+                console.log(error)
+              })
           }
         })
         .catch((error) => {
+          console.log(`error`)
           console.log(error)
         })
     },

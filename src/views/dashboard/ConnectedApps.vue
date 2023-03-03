@@ -205,6 +205,7 @@ section #services li span {
 </style>
 
 <script>
+import LoginUrl from '../../../services/login.url'
 export default {
   name: 'ConnectedApps',
   components: {},
@@ -217,24 +218,31 @@ export default {
     }
   },
   mounted() {
-    this.$http
-      .get('/twitter/user/login')
-      .then((response) => {
-        console.log(response)
-        this.twitter_url = response.data.url
-      })
-      .catch((error) => {
+    LoginUrl.getTwitterUrl().then(
+      (response) => {
+        if (response.status === 200 && response.data.url !== null) {
+          this.twitter_url = response.data.url
+        }
+      },
+      (error) => {
+        console.log(`error`)
         console.log(error)
-      })
-    this.$http
-      .get('/gumroad/user/login')
-      .then((response) => {
-        this.gumroad_url = response.data.url
-        console.log(response)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+        alert('Error fetching twitter url')
+      },
+    )
+
+    LoginUrl.getGumroadUrl().then(
+      (response) => {
+        if (response.status === 200 && response.data.url !== null) {
+          this.gumroad_url = response.data.url
+        }
+      },
+      (error) => {
+        console.log(`error`)
+        console.log(error)
+        alert('Error fetching gumroad url')
+      },
+    )
   },
 }
 </script>

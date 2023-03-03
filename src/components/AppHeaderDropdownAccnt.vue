@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import AuthService from '../../services/auth.service'
 import avatar from '@/assets/images/avatars/8.jpg'
 
 export default {
@@ -60,11 +61,9 @@ export default {
   },
   methods: {
     async handleLogout() {
-      await this.$http
-        .get('/user/logout')
+      AuthService.logout()
         .then((logoutResponse) => {
           if (logoutResponse.data.success) {
-            localStorage.removeItem('token')
             this.$router.push({ path: '/login' })
             alert(' User logged out')
           } else {
