@@ -21,21 +21,34 @@
                           <img
                             src="https://cdn-icons-png.flaticon.com/512/3938/3938028.png"
                             width="50"
+                            :class="{ 'connected-img': twitter_url === null }"
                           />
                         </a>
                       </div>
                       <span>Twitter</span>
+                      <a :href="twitter_url" v-if="twitter_url !== null">
+                        <CButton color="warning" variant="outline"
+                          >Connect</CButton
+                        >
+                      </a>
+                      <CButton color="success" variant="outline" v-else
+                        >Connected</CButton
+                      >
                     </li>
                     <li>
                       <div class="gumroad">
-                        <a :href="gumroad_url">
-                          <img
-                            src="https://seeklogo.com/images/G/gumroad-logo-3A93C7330E-seeklogo.com.png"
-                            width="50"
-                          />
-                        </a>
+                        <img
+                          src="https://seeklogo.com/images/G/gumroad-logo-3A93C7330E-seeklogo.com.png"
+                          width="50"
+                        />
                       </div>
                       <span>Gumroad</span>
+                      <a :href="gumroad_url" v-if="gumroad_url !== null">
+                        <CButton color="warning">Connect</CButton>
+                      </a>
+                      <CButton color="success" variant="outline" v-else
+                        >Connected</CButton
+                      >
                     </li>
                     <li>
                       <div class="youtube">
@@ -47,6 +60,12 @@
                         </a>
                       </div>
                       <span>YouTube</span>
+                      <a :href="gumroad_url" v-if="gumroad_url !== null">
+                        <CButton color="warning">Connect</CButton>
+                      </a>
+                      <CButton color="success" variant="outline" v-else
+                        >Connected</CButton
+                      >
                     </li>
                     <li>
                       <div class="linkedin">
@@ -58,6 +77,12 @@
                         </a>
                       </div>
                       <span>LinkedIn</span>
+                      <a :href="gumroad_url" v-if="gumroad_url !== null">
+                        <CButton color="warning">Connect</CButton>
+                      </a>
+                      <CButton color="success" variant="outline" v-else
+                        >Connected</CButton
+                      >
                     </li>
                     <li>
                       <div class="instagram">
@@ -69,6 +94,12 @@
                         </a>
                       </div>
                       <span>Instagram</span>
+                      <a :href="gumroad_url" v-if="gumroad_url !== null">
+                        <CButton color="warning">Connect</CButton>
+                      </a>
+                      <CButton color="success" variant="outline" v-else
+                        >Connected</CButton
+                      >
                     </li>
                     <li>
                       <div class="facebook">
@@ -80,6 +111,12 @@
                         </a>
                       </div>
                       <span>Facebook</span>
+                      <a :href="gumroad_url" v-if="gumroad_url !== null">
+                        <CButton color="warning">Connect</CButton>
+                      </a>
+                      <CButton color="success" variant="outline" v-else
+                        >Connected</CButton
+                      >
                     </li>
                   </ul>
                 </section>
@@ -87,20 +124,18 @@
             </CRow>
           </CCardBody>
           <CCardFooter>
-            <CRow :xs="{ cols: 1 }" :md="{ cols: 5 }" class="text-center">
-              <CCol class="mb-sm-2 mb-0">
-                <div class="text-medium-emphasis">Visits</div>
+            <CRow :xs="{ cols: 1 }" :md="{ cols: 4 }" class="text-center">
+              <CCol class="mb-sm-3 mb-3">
+                <div class="text-medium-emphasis">Connected Accounts</div>
                 <strong>29.703 Users (40%)</strong>
-                <CProgress
-                  class="mt-2"
-                  color="success"
-                  thin
-                  :precision="1"
-                  :value="40"
-                />
+                <CProgress class="mt-2">
+                  <CProgressBar :value="15" />
+                  <CProgressBar color="success" :value="30" />
+                  <CProgressBar color="info" :value="20" />
+                </CProgress>
               </CCol>
-              <CCol class="mb-sm-2 mb-0 d-md-down-none">
-                <div class="text-medium-emphasis">Unique</div>
+              <CCol class="mb-sm-3 mb-3 d-md-down-none">
+                <div class="text-medium-emphasis">Total Followers</div>
                 <strong>24.093 Users (20%)</strong>
                 <CProgress
                   class="mt-2"
@@ -110,8 +145,8 @@
                   :value="20"
                 />
               </CCol>
-              <CCol class="mb-sm-2 mb-0">
-                <div class="text-medium-emphasis">Pageviews</div>
+              <CCol class="mb-sm-3 mb-3">
+                <div class="text-medium-emphasis">Post Created</div>
                 <strong>78.706 Views (60%)</strong>
                 <CProgress
                   class="mt-2"
@@ -121,8 +156,8 @@
                   :value="60"
                 />
               </CCol>
-              <CCol class="mb-sm-2 mb-0">
-                <div class="text-medium-emphasis">New Users</div>
+              <CCol class="mb-sm-3 mb-3">
+                <div class="text-medium-emphasis">Schedules Post</div>
                 <strong>22.123 Users (80%)</strong>
                 <CProgress
                   class="mt-2"
@@ -131,11 +166,6 @@
                   :precision="1"
                   :value="80"
                 />
-              </CCol>
-              <CCol class="mb-sm-2 mb-0 d-md-down-none">
-                <div class="text-medium-emphasis">Bounce Rate</div>
-                <strong>Average Rate (40.15%)</strong>
-                <CProgress class="mt-2" :value="40" thin :precision="1" />
               </CCol>
             </CRow>
           </CCardFooter>
@@ -202,6 +232,10 @@ section #services li span {
   padding: 20px;
   max-width: 300px;
 }
+
+.connected-img {
+  opacity: 0.4;
+}
 </style>
 
 <script>
@@ -221,11 +255,10 @@ export default {
     LoginUrl.getTwitterUrl().then(
       (response) => {
         if (response.status === 200 && response.data.url !== null) {
-          this.twitter_url = response.data.url
+          this.twitter_url = response.data.url ?? null
         }
       },
       (error) => {
-        console.log(`error`)
         console.log(error)
         alert('Error fetching twitter url')
       },
@@ -238,7 +271,6 @@ export default {
         }
       },
       (error) => {
-        console.log(`error`)
         console.log(error)
         alert('Error fetching gumroad url')
       },
