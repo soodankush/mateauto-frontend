@@ -12,7 +12,7 @@ const routes = [
       {
         path: '/apps',
         name: 'Apps',
-        component: () => import('@/views/dashboard/ConnectedApps.vue'),
+        component: () => import('@/views/system/ConnectedApps.vue'),
         meta: {
           requiresAuth: true,
         },
@@ -25,6 +25,22 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: '/saved-items',
+        name: 'Saved Items',
+        component: () => import('@/views/system/SavedItems.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: '/bookmarks',
+        name: 'Bookmarks',
+        component: () => import('@/views/base/Cards.vue'),
         meta: {
           requiresAuth: true,
         },

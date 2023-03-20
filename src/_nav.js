@@ -15,4 +15,10 @@ export default [
       text: 'NEW',
     },
   },
+  {
+    component: 'CNavItem',
+    name: 'Saved Items',
+    to: '/saved-items',
+    icon: 'cil-drop',
+  },
 ]
