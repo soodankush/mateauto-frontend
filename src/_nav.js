@@ -21,4 +21,10 @@ export default [
     to: '/saved-items',
     icon: 'cil-drop',
   },
+  {
+    component: 'CNavItem',
+    name: 'Posts',
+    to: '/post',
+    icon: 'cil-drop',
+  },
 ]

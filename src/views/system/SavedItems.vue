@@ -7,6 +7,7 @@
         </CCardHeader>
         <CCardBody>
           <CRow :xs="{ cols: 1, gutter: 4 }" :md="{ cols: 3 }">
+            <CSpinner color="warning" variant="grow" />
             <CCol xs v-for="bookmark in bookmarksData" :key="bookmark.id">
               <CCard>
                 <CCardBody>

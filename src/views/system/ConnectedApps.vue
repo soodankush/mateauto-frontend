@@ -15,108 +15,44 @@
               <CCol :md="12">
                 <section>
                   <ul id="services">
-                    <li>
-                      <div class="twitter">
-                        <a :href="twitter_url">
-                          <img
-                            src="https://cdn-icons-png.flaticon.com/512/3938/3938028.png"
-                            width="50"
-                            :class="{ 'connected-img': twitter_url === null }"
-                          />
-                        </a>
+                    <li
+                      v-for="(platform, index) in available_platforms"
+                      :key="index"
+                    >
+                      <div :class="platform">
+                        <!-- <a href="https://facebook.com/colorlib/"> -->
+                        <img :src="'/platforms/' + platform.logo" width="50" />
+                        <!-- </a> -->
                       </div>
-                      <span>Twitter</span>
-                      <a :href="twitter_url" v-if="twitter_url !== null">
-                        <CButton color="warning" variant="outline"
-                          >Connect</CButton
+                      <span>{{ platform.platform }}</span>
+                      <div
+                        v-if="
+                          connected_platforms[index].status === 1 &&
+                          platform.platform_status === 1
+                        "
+                      >
+                        <h6>
+                          {{
+                            connected_platforms[index].platform_details
+                              .username ?? null
+                          }}
+                        </h6>
+                        <CButton color="success" variant="outline"
+                          >Connected</CButton
                         >
-                      </a>
-                      <CButton color="success" variant="outline" v-else
-                        >Connected</CButton
-                      >
-                    </li>
-                    <li>
-                      <div class="gumroad">
-                        <img
-                          src="https://seeklogo.com/images/G/gumroad-logo-3A93C7330E-seeklogo.com.png"
-                          width="50"
-                        />
                       </div>
-                      <span>Gumroad</span>
-                      <a :href="gumroad_url" v-if="gumroad_url !== null">
+                      <a
+                        :href="connected_platforms[index].login_url.url"
+                        v-else-if="
+                          connected_platforms[index].status === 0 &&
+                          platform.platform_status === 1
+                        "
+                      >
                         <CButton color="warning">Connect</CButton>
                       </a>
-                      <CButton color="success" variant="outline" v-else
-                        >Connected</CButton
-                      >
-                    </li>
-                    <li>
-                      <div class="youtube">
-                        <a :href="youtube_url">
-                          <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0SVNZ2A92EA0Y3G85R62OTV9DECgf7_1Nlv7aYkWk_w&s"
-                            width="50"
-                          />
-                        </a>
-                      </div>
-                      <span>YouTube</span>
-                      <a :href="gumroad_url" v-if="gumroad_url !== null">
-                        <CButton color="warning">Connect</CButton>
+                      <a v-else>
+                        <CButton color="warning">Upcoming</CButton>
                       </a>
-                      <CButton color="success" variant="outline" v-else
-                        >Connected</CButton
-                      >
-                    </li>
-                    <li>
-                      <div class="linkedin">
-                        <a href="https://www.linkedin.com/company/colorlib">
-                          <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzGvNj5RY7oY9KyBoaciTRhpwwdY6-MIjJvt-P5XV-wQ&s"
-                            width="50"
-                          />
-                        </a>
-                      </div>
-                      <span>LinkedIn</span>
-                      <a :href="gumroad_url" v-if="gumroad_url !== null">
-                        <CButton color="warning">Connect</CButton>
-                      </a>
-                      <CButton color="success" variant="outline" v-else
-                        >Connected</CButton
-                      >
-                    </li>
-                    <li>
-                      <div class="instagram">
-                        <a href="https://www.linkedin.com/company/colorlib">
-                          <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/768px-Instagram_logo_2016.svg.png"
-                            width="50"
-                          />
-                        </a>
-                      </div>
-                      <span>Instagram</span>
-                      <a :href="gumroad_url" v-if="gumroad_url !== null">
-                        <CButton color="warning">Connect</CButton>
-                      </a>
-                      <CButton color="success" variant="outline" v-else
-                        >Connected</CButton
-                      >
-                    </li>
-                    <li>
-                      <div class="facebook">
-                        <a href="https://facebook.com/colorlib/">
-                          <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR3533oyjpCcx0YMoDUxF3hxatXHdKv8ss6Nt1GFZAzw&s"
-                            width="50"
-                          />
-                        </a>
-                      </div>
-                      <span>Facebook</span>
-                      <a :href="gumroad_url" v-if="gumroad_url !== null">
-                        <CButton color="warning">Connect</CButton>
-                      </a>
-                      <CButton color="success" variant="outline" v-else
-                        >Connected</CButton
-                      >
                     </li>
                   </ul>
                 </section>
@@ -207,10 +143,10 @@ section #services li div {
 section #services li a {
   color: #77cc6d;
 }
-section #services li div:hover {
+/* section #services li div:hover {
   transform: rotate(360deg);
   border-radius: 100px;
-}
+} */
 section #services li span {
   width: 120px;
   height: 20px;
@@ -240,41 +176,36 @@ section #services li span {
 
 <script>
 import LoginUrl from '../../../services/login.url'
+
 export default {
   name: 'ConnectedApps',
   components: {},
   data() {
     return {
-      message: 'Hello Worl 1d',
-      twitter_url: null,
-      gumroad_url: null,
-      youtube_url: 'https://www.youtube.com/c/Colorlib',
+      available_platforms: {},
+      connected_platforms: {},
+      total_connected_accounts: null,
     }
   },
   mounted() {
-    LoginUrl.getTwitterUrl().then(
-      (response) => {
-        if (response.status === 200 && response.data.url !== null) {
-          this.twitter_url = response.data.url ?? null
+    LoginUrl.getConnectedAccountDetails()
+      .then((connectedAppsResponse) => {
+        let self = this
+        console.log(`connectedApp response`)
+        console.log(connectedAppsResponse)
+        if (connectedAppsResponse.status === 200) {
+          self.available_platforms =
+            connectedAppsResponse.data.data.available_platforms
+          self.connected_platforms =
+            connectedAppsResponse.data.data.connected_platforms
+          self.total_connected_accounts =
+            connectedAppsResponse.data.data.total_connected_accounts
         }
-      },
-      (error) => {
-        console.log(error)
-        alert('Error fetching twitter url')
-      },
-    )
-
-    LoginUrl.getGumroadUrl().then(
-      (response) => {
-        if (response.status === 200 && response.data.url !== null) {
-          this.gumroad_url = response.data.url
-        }
-      },
-      (error) => {
-        console.log(error)
-        alert('Error fetching gumroad url')
-      },
-    )
+      })
+      .catch((connectedAppError) => {
+        console.log(`ConnectedAppErr`)
+        console.log(connectedAppError)
+      })
   },
 }
 </script>

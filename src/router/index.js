@@ -38,9 +38,9 @@ const routes = [
         },
       },
       {
-        path: '/bookmarks',
-        name: 'Bookmarks',
-        component: () => import('@/views/base/Cards.vue'),
+        path: '/post',
+        name: 'Posts',
+        component: () => import('@/views/system/Posts.vue'),
         meta: {
           requiresAuth: true,
         },

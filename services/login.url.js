@@ -8,6 +8,10 @@ class LoginUrl {
   getGumroadUrl() {
     return api.get('/gumroad/user/login')
   }
+
+  getConnectedAccountDetails() {
+    return api.get('/connected/accounts')
+  }
 }
 
 export default new LoginUrl()

@@ -50,9 +50,9 @@
                 <div>
                   <h2>Sign up</h2>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua.
+                    Simplify Your Social Media Strategy with Our Content
+                    Management and Scheduling Platform. Copncentrate on content
+                    and rest leave on MateAuto.
                   </p>
                   <CButton color="light" variant="outline" class="mt-3">
                     Register Now!

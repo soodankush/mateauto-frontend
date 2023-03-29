@@ -29,7 +29,7 @@ const setup = () => {
 
           try {
             const newTokenData = await axiosInstance.post('/login', {
-              refreshToken: TokenService.getLocalRefreshToken(),
+              accessToken: TokenService.getLocalAccessToken(),
             })
 
             TokenService.updateLocalAccessToken(newTokenData)
